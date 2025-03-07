@@ -12,7 +12,9 @@ import numpy as np
 import time
 from typing import List, Literal, Optional, Tuple, TYPE_CHECKING
 
-from qr_utils import Logger, Timer
+from .timer import Timer
+from .utils import Logger
+import drake_trajopt.config as cfg
 
 from pydrake.all import (
     BsplineBasis,
@@ -34,17 +36,8 @@ from pydrake.all import (
 )
 from manipulation.meshcat_utils import PublishPositionTrajectory
 
-
-import Roboverse.configuration as robo_config
-from Roboverse.skrobot.robot_conf import Conf
-
 if TYPE_CHECKING:
-    from Roboverse.physical_world.drake_state import DrakeState
-
-from qr_spot.sim.brain import (
-    RoboverseConfToDrakePositions,
-    GripperPositionRoboverseToDrake,
-)
+    from .drake_state import DrakeState
 
 
 class TrajectoryOptimizer:
@@ -78,90 +71,16 @@ class TrajectoryOptimizer:
     WHITE = Rgba(1.0, 1.0, 1.0, 0.5)
     BLACK = Rgba(0.0, 0.0, 0.0, 1.0)
 
-
-    # =========================================================================
-    # region Public methods
-    # =========================================================================
-
-    def split_and_smooth(self, path: List[Conf]):
-        split_traj = []
-
-        # Save actual positions to reset them later.
-        saved_positions = self.plant.GetPositions(self.plant_context)
-
-        # Extract base path
-        if not np.all(path[0]['base'] == path[-1]['base']):
-            base_path = np.hstack([conf['base'].reshape(-1, 1) for conf in path])  # (3, C)
-            base_path, times = self.Smooth(path[0], base_path, dv_indices=range(0, 3))
-            split_traj.append(('base', False, base_path, times))
-
-        # Extract right arm path
-        if not np.all(path[0]['right'] == path[-1]['right']):
-            arm_path = np.hstack([conf['right'].reshape(-1, 1) for conf in path])  # (6, C)
-            arm_path, times = self.Smooth(path[0], arm_path, dv_indices=range(3, 9))
-            split_traj.append(('right', False, arm_path, times))
-
-        # Extract gripper path
-        if not np.all(path[0]['right_gripper'] == path[-1]['right_gripper']):
-            gripper_path = [path[0]['right_gripper'], path[-1]['right_gripper']]
-            times = [0, 1]
-            split_traj.append(('right_gripper', False, gripper_path, times))
-
-        self.RehearseSplitTrajectory(split_traj, saved_positions)
-
-        # Reset the positions
-        # self.plant.SetPositions(self.plant_context, saved_positions)
-        # self.drake_state.Publish()
-
-        return split_traj
-
-    # endregion Public methods
-    # =========================================================================
-
-
-    def RehearseSplitTrajectory(
+    def RehearseTrajectory(
             self,
-            split_traj: List[Tuple[str, bool, np.ndarray, List[float]]],
-            saved_positions: np.ndarray,  # (10,)
-        ):
-        init_full_positions = saved_positions
-        for chain, _, path, times in split_traj:
-            init_full_positions = self.RehearseSplit(chain, path, times, init_full_positions)
-
-
-    def RehearseSplit(
-            self,
-            chain: Literal['base', 'right', 'right_gripper'],
             path: List[np.ndarray],
-            times: List[float],
-            init_full_positions: np.ndarray) -> np.ndarray:
+            times: List[float]) -> np.ndarray:
         """
         Args:
-            chain (Literal['base', 'right', 'right_gripper']): Chain to rehearse.
-            path (List[np.ndarray]): Path to rehearse. The dimension is the
-                dimension of the chain (base=2, right=6, right_gripper=1).
+            path (List[np.ndarray]): Path to rehearse.
             times (List[float]): Times corresponding to each configuration.
-            init_full_positions (np.ndarray, dtype=float, shape=(10,)): Initial
-                positions of all chains.
         """
         assert times[0] == 0
-
-        if chain == 'base':
-            chain_index_slice = slice(0, 3)
-            roboverse2drake = lambda x: x
-        elif chain == 'right':
-            chain_index_slice = slice(3, 9)
-            roboverse2drake = lambda x: x
-        elif chain == 'right_gripper':
-            chain_index_slice = slice(9, 10)
-            roboverse2drake = GripperPositionRoboverseToDrake
-        else:
-            raise ValueError(f"Invalid chain: {chain}")
-
-        def GetFullPositions(index: int) -> np.ndarray:
-            full_positions = init_full_positions.copy()
-            full_positions[chain_index_slice] = roboverse2drake(path[index])
-            return full_positions
 
         for i in range(1, len(path)):
             # Sleep till next timestep.
@@ -169,35 +88,39 @@ class TrajectoryOptimizer:
             time.sleep(duration)
 
             # Set the positions
-            self.plant.SetPositions(self.plant_context, GetFullPositions(i))
+            self.plant.SetPositions(self.plant_context, path[i])
 
             # Publish to Meshcat.
             self.drake_state.Publish()
 
-        return GetFullPositions(-1)
+        return path[-1]
 
+    # =========================================================================
+    # region Public methods
+    # =========================================================================
 
     def Smooth(
             self,
-            init_conf: Conf,
-            qs: np.ndarray,
+            path_guess: np.ndarray,
             dv_indices: List[int],
         ) -> Tuple[List[np.ndarray], List[float]]:
         """
         Args:
-            init_conf (Conf): initial configuration
-            qs (np.ndarray, dtype=float, shape=(P', C)): path guess
+            path_guess (np.ndarray, dtype=float, shape=(P, C)): path guess
             dv_indices (List[int]): indices of decision variables to optimize
         """
+        # Save actual positions to reset them later.
+        saved_positions = self.plant.GetPositions(self.plant_context)
+
         Logger().INFO("Performing trajopt smoothing ...")
 
         timer = Timer(num_skip=0)
 
         # Make initial Bspline from RRT path.
-        traj = self.MakeBsplineTrajectoryFromInitPath(init_conf, qs, dv_indices)
+        traj = self.MakeBsplineTrajectoryFromInitPath(path_guess)
 
         # Plot RRT trajectory.
-        self.PlotEndEffectorTrajInMeshcat(traj, "/init_rrt_path", self.WHITE)
+        self.PlotEndEffectorTrajInMeshcat(traj, "/init_path", self.WHITE)
 
         # Perform kinematic trajectory optimization.
         traj, result = self.TriLevelKinematicTrajopt(traj, dv_indices, timer)
@@ -217,8 +140,15 @@ class TrajectoryOptimizer:
         Logger().INFO("\n" + timer.get_stats_string())
 
         t_result = np.linspace(traj.start_time(), traj.end_time(), num=100)
-        q_result = [traj.value(t)[dv_indices, 0] for t in t_result]
-        return q_result, t_result
+        path_result = [traj.value(t)[dv_indices, 0] for t in t_result]
+
+        self.RehearseTrajectory(path_result, t_result)
+
+        # Reset the positions
+        # self.plant.SetPositions(self.plant_context, saved_positions)
+        # self.drake_state.Publish()
+
+        return path_result, t_result
 
 
     def UniLevelKinematicTrajopt(self,
@@ -344,6 +274,9 @@ class TrajectoryOptimizer:
          # Solve trajopt with collision constraints.       
         return self.SolveKinematicTrajopt(trajopt, timer)
 
+    # endregion
+    # =========================================================================
+
 
     def GetClearance(self, positions: np.ndarray, max_distance: float) -> float:
         # Save actual positions to reset them later.
@@ -397,7 +330,7 @@ class TrajectoryOptimizer:
             (np.ndarray, dtype=float, shape=(10, N)): evenly spaced samples
                 from the trajectory.
         """
-        num_samples = robo_config.trajopt.kot.num_viz_traj_samples
+        num_samples = cfg.trajopt.kot.num_viz_traj_samples
         return traj.vector_values(np.linspace(0, 1, num_samples),)  # (10, N)
 
 
@@ -461,38 +394,29 @@ class TrajectoryOptimizer:
             diff = traj_values - prev_traj_values  # (10, N)
             distance: np.ndarray = np.linalg.norm(diff, axis=0)  # (N,)
             if distance.max() > TOLERANCE:
-                time.sleep(robo_config.trajopt.kot.viz_sleep_time)
+                time.sleep(cfg.trajopt.kot.viz_sleep_time)
 
         return self.PlotEndEffectorTrajInMeshcat(
             traj_values, "/trajopt_smoothing_path", traj_viz_color,
         )
 
 
-    def MakeBsplineTrajectoryFromInitPath(
-            self,
-            init_conf: Conf,
-            qs: np.ndarray,
-            dv_indices: List[int],
-    ) -> BsplineTrajectory:
+    def MakeBsplineTrajectoryFromInitPath(self, path_guess: np.ndarray) \
+        -> BsplineTrajectory:
         """
         Args:
-            init_conf (Conf): initial configuration
-            qs (np.ndarray, dtype=float, shape=(P', C)): path guess
+            q_guess (np.ndarray, dtype=float, shape=(P, C)): path guess
             dv_indices (List[int]): indices of decision variables to optimize
         """
         # Subsample control points if there are too many
-        if qs.shape[1] > robo_config.trajopt.kot.max_control_points:
-            step = qs.shape[1] // robo_config.trajopt.kot.max_control_points
-            qs = qs[:, ::step]
-        num_control_pts = qs.shape[1]
+        if path_guess.shape[1] > cfg.trajopt.kot.max_control_points:
+            step = path_guess.shape[1] // cfg.trajopt.kot.max_control_points
+            path_guess = path_guess[:, ::step]
+        num_control_pts = path_guess.shape[1]
         Logger.INFO(f"[KTO] Number of control points: {num_control_pts}")
 
-        q_init = RoboverseConfToDrakePositions(init_conf)  # (10,)
-        q_guess = q_init.reshape(-1, 1).repeat(num_control_pts, axis=-1)  # (10, C)
-        q_guess[dv_indices, :] = qs  # (10, C)
-
         basis = BsplineBasis(order=4, num_basis_functions=num_control_pts)
-        return BsplineTrajectory(basis, q_guess)
+        return BsplineTrajectory(basis, path_guess)
 
 
     def ComputeCollisionBoundInStartAndGoalPositions(
@@ -500,7 +424,7 @@ class TrajectoryOptimizer:
             traj: BsplineTrajectory,
             timer: Timer,
     ) -> float:
-        bound = robo_config.trajopt.kot.collision_margin
+        bound = cfg.trajopt.kot.collision_margin
         influence_distance_offset = 0.1
 
         q_start = traj.InitialValue()  # (10,)
@@ -513,7 +437,7 @@ class TrajectoryOptimizer:
             Logger.INFO(f"[KTO] Start min distance: {clearance:.4f}")
             Logger.INFO(f"[KTO] between pair {nearest_pair_names[0]} and {nearest_pair_names[1]}")
             Logger.INFO("")
-            clearance_bound = max(clearance - robo_config.trajopt.kot.collision_tolerance, 0)
+            clearance_bound = max(clearance - cfg.trajopt.kot.collision_tolerance, 0)
             bound = min(bound, clearance_bound)
 
         # Compute clearance for the goal position
@@ -523,7 +447,7 @@ class TrajectoryOptimizer:
             Logger.INFO(f"[KTO] Goal min distance: {clearance:.4f}")
             Logger.INFO(f"[KTO] between pair {nearest_pair_names[0]} and {nearest_pair_names[1]}")
             Logger.INFO("")
-            clearance_bound = max(clearance - robo_config.trajopt.kot.collision_tolerance, 0)
+            clearance_bound = max(clearance - cfg.trajopt.kot.collision_tolerance, 0)
             bound = min(bound, clearance_bound)
 
         return bound
@@ -583,8 +507,8 @@ class TrajectoryOptimizer:
         assert prog.CheckSatisfiedAtInitialGuess(bcs)
 
         # Velocity bounds
-        velocity_min = np.maximum(self.plant.GetVelocityLowerLimits(), -robo_config.trajopt.limits.velocity)
-        velocity_max = np.minimum(self.plant.GetVelocityUpperLimits(), +robo_config.trajopt.limits.velocity)
+        velocity_min = np.maximum(self.plant.GetVelocityLowerLimits(), -cfg.trajopt.limits.velocity)
+        velocity_max = np.minimum(self.plant.GetVelocityUpperLimits(), +cfg.trajopt.limits.velocity)
         trajopt.AddVelocityBounds(velocity_min, velocity_max)
 
         # End point position constraints
@@ -631,7 +555,7 @@ class TrajectoryOptimizer:
             None,
             influence_distance_offset,
         )
-        num_collision_checks = robo_config.trajopt.kot.num_collision_checks
+        num_collision_checks = cfg.trajopt.kot.num_collision_checks
         if num_collision_checks == 'default':
             num_collision_checks = trajopt.num_control_points()
         num_collision_checks = max(num_collision_checks, 2)
@@ -682,18 +606,18 @@ class TrajectoryOptimizer:
             self.plant,
             np.linspace(
                 traj.start_time(), traj.end_time(),
-                robo_config.trajopt.toppra.num_grid_points,
+                cfg.trajopt.toppra.num_grid_points,
             ),
         )
         
         # Velocity bounds
-        velocity_min = np.maximum(self.plant.GetVelocityLowerLimits(), -robo_config.trajopt.limits.velocity)
-        velocity_max = np.minimum(self.plant.GetVelocityUpperLimits(), +robo_config.trajopt.limits.velocity)
+        velocity_min = np.maximum(self.plant.GetVelocityLowerLimits(), -cfg.trajopt.limits.velocity)
+        velocity_max = np.minimum(self.plant.GetVelocityUpperLimits(), +cfg.trajopt.limits.velocity)
         toppra.AddJointVelocityLimit(velocity_min, velocity_max)
 
         # Acceleration bounds
-        acceleration_min = np.maximum(self.plant.GetAccelerationLowerLimits(), -robo_config.trajopt.limits.acceleration)
-        acceleration_max = np.minimum(self.plant.GetAccelerationUpperLimits(), +robo_config.trajopt.limits.acceleration)
+        acceleration_min = np.maximum(self.plant.GetAccelerationLowerLimits(), -cfg.trajopt.limits.acceleration)
+        acceleration_max = np.minimum(self.plant.GetAccelerationUpperLimits(), +cfg.trajopt.limits.acceleration)
         toppra.AddJointAccelerationLimit(acceleration_min, acceleration_max)
 
         # Computes a 1D piecewise polynomial of the trajectory of time
