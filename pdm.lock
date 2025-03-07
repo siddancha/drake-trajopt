@@ -5,10 +5,20 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:5bc3b8a6cf142fc538674d1130214111aa04bb9652d9e0d1a52bc2c4a42bc1a6"
+content_hash = "sha256:7c045414398f3bb332ccb70dc3cfaaff698d470533a4b37748f5fe5f0e9ecfdc"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<=3.12"
+
+[[package]]
+name = "addict"
+version = "2.4.0"
+summary = "Addict is a dictionary whose items can be set using both attribute and item syntax."
+groups = ["default"]
+files = [
+    {file = "addict-2.4.0-py3-none-any.whl", hash = "sha256:249bb56bbfd3cdc2a004ea0ff4c2b6ddc84d53bc2194761636eb314d5cfa5dfc"},
+    {file = "addict-2.4.0.tar.gz", hash = "sha256:b3b2210e0e067a281f5646c8c5db92e99b7231ea8b0eb5f74dbdf9e259d4e494"},
+]
 
 [[package]]
 name = "anyio"
