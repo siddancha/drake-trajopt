@@ -1,7 +1,7 @@
 from copy import copy
-import collections
 import dataclasses as dc
 import os
+from pathlib import Path
 import shutil
 from typing import Dict, List, Optional, Tuple
 
@@ -17,22 +17,25 @@ from pydrake.all import (
     QueryObject,
     Rgba,
     RigidTransform,
+    StartMeshcat,
     ProximityProperties,
     IllustrationProperties,
     SceneGraphInspector,
 )
-from qr_simulation.all import ConfigureAndStartMeshcat
-from qr_spot.sim.station import MakeSpotStation
+
+from manipulation.station import LoadScenario, MakeHardwareStation
+
 from qr_spot.sim.brain import RoboverseConfToDrakePositions
 
 import numpy as np
+
+from .trajopt import TrajectoryOptimizer
 
 from Roboverse.skrobot.robot_conf import Conf
 import Roboverse.skrobot.model as model_module
 from Roboverse.skrobot.body import Body
 from Roboverse.skrobot.shared import Trans
 from Roboverse.physical_world.physical import Physical, TRI
-from Roboverse.planning.trajopt import TrajectoryOptimizer
 
 import Utils.log_dirs as log_dirs
 data_directory = None
@@ -65,12 +68,23 @@ class DrakeShape:
 
 
 class DrakeState:
-    def __init__(self, run_meshcat: bool = True):
-        global data_directory
+    def __init__(
+            self,
+            scenario_file: str | Path,
+            gripper_link_name: str,
+            finger_link_names: List[str] | None = None,
+            run_meshcat: bool = True,
+        ):
+        """
+        Args:
+            scenario_file (str | Path): Path to the scenario file to load
+                into the hardware station.
+            run_meshcat (bool): Whether to run Meshcat.
+        """
+        self.meshcat: Optional[Meshcat] = StartMeshcat() if run_meshcat else None
 
-        self.meshcat: Optional[Meshcat] = ConfigureAndStartMeshcat(port=8888) if run_meshcat else None
-
-        self.station = MakeSpotStation(meshcat=self.meshcat)
+        scenario = LoadScenario(str(scenario_file))
+        self.station = MakeHardwareStation(scenario, self.meshcat)
         self.plant = self.station.plant()
         self.scene_graph = self.station.scene_graph()
 
@@ -87,8 +101,8 @@ class DrakeState:
 
         self.trajopt = TrajectoryOptimizer(self)
 
-        self._world_shapes: Dict[str, DrakeShape] = collections.OrderedDict()
-        self._grasped_shape: Optional[DrakeShape] = None
+        # self._world_shapes: Dict[str, DrakeShape] = collections.OrderedDict()
+        # self._grasped_shape: Optional[DrakeShape] = None
 
         data_directory = log_dirs.log_dir_root + 'meshcat/'
         if not os.path.exists(data_directory):
@@ -96,8 +110,8 @@ class DrakeState:
         self.clean_directory()
 
         self.world_frame_id = self.GetFrameId("world")
-        self.gripper_frame_id = self.GetFrameId("spot::arm_link_wr1")
-        self.finger_frame_id = self.GetFrameId("spot::arm_link_fngr")
+        self.gripper_frame_id = self.GetFrameId(gripper_link_name)
+        finger_frame_ids = [self.GetFrameId(e) for e in finger_link_names]
 
         self.cf_manager = self.scene_graph.collision_filter_manager(self.sg_context)
 
@@ -106,7 +120,7 @@ class DrakeState:
         self.declaration_on_attach = (
             CollisionFilterDeclaration().ExcludeBetween(
                 GeometrySet(self.gripper_frame_id),
-                GeometrySet(self.finger_frame_id)
+                GeometrySet(finger_frame_ids),
             )
         )
 
@@ -115,7 +129,7 @@ class DrakeState:
         self.declaration_on_release = (
             CollisionFilterDeclaration().AllowBetween(
                 GeometrySet(self.world_frame_id),
-                GeometrySet([self.finger_frame_id, self.gripper_frame_id])
+                GeometrySet([self.gripper_frame_id] + finger_frame_ids),
             )
         )
 
@@ -138,14 +152,6 @@ class DrakeState:
         # automatically gets updated when the plant positions are set!
         return RigidTransform(X_WG)
 
-    def X_WF (self) -> RigidTransform:
-        query_object: QueryObject = self.scene_graph.get_query_output_port().Eval(self.sg_context)
-        X_WF = query_object.GetPoseInWorld(self.finger_frame_id)
-        
-        # Copying the rigid transform is important here because X_WG
-        # automatically gets updated when the plant positions are set!
-        return RigidTransform(X_WF)
-
     def SetRobotPositions(self, positions: np.ndarray):
         self.plant.SetPositions(self.plant_context, positions)
 
@@ -154,6 +160,7 @@ class DrakeState:
         self.proximity_visualizer.ForcedPublish(self.proximity_visualizer_context)
 
     def AddDrakeLinkToSceneGraph(self, dlink: DrakeLink, parent_frame_id: FrameId):
+        raise NotImplementedError
         for geom_data in dlink.geoms:
             # Register each processed geometry to scene graph
             geom_instance = geom_data.geom_instance
@@ -173,6 +180,7 @@ class DrakeState:
             geom_data.geom_id = geom_id
 
     def AddDrakeShapeToSceneGraph(self, dshape: DrakeShape, parent_frame_id: FrameId):
+        raise NotImplementedError
         for dlink in dshape.links_dict.values():
             self.AddDrakeLinkToSceneGraph(dlink, parent_frame_id)
 
@@ -237,6 +245,7 @@ class DrakeState:
             return True
 
     def SetGraspedShape(self, attached: Optional[Tuple[Body, Trans]]):
+        raise NotImplementedError
         if attached is not None:
             body, trans = attached
             attached_shape_name = body.shape.name
