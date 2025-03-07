@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>drake_trajopt_models</name>
+    <version>1.0.0</version>
+    <description>Assets for the drake-trajopt project</description>
+    <maintainer email="sancha@mit.edu">Siddharth Ancha</maintainer>
+    <license>BSD</license>
+</package>
