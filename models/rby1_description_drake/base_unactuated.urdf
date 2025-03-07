@@ -14,7 +14,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/BASE.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/BASE.obj" />
       </geometry>
     </visual>
 
@@ -153,7 +153,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/WHEEL.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/WHEEL.obj" />
       </geometry>
     </visual>
 
@@ -175,7 +175,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/WHEEL.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/WHEEL.obj" />
       </geometry>
     </visual>
 

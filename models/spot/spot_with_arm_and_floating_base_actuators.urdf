@@ -10,12 +10,12 @@
   <link name="body">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/body.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/body.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/body_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/body_collision.obj"/>
       </geometry>
     </collision>
   </link>
@@ -89,7 +89,7 @@
   <link name="front_left_hip">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_left_hip.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_left_hip.obj"/>
       </geometry>
     </visual>
     <inertial>
@@ -108,12 +108,12 @@
   <link name="front_left_upper_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_left_upper_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_left_upper_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/left_upper_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/left_upper_leg_collision.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -132,12 +132,12 @@
   <link name="front_left_lower_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_left_lower_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_left_lower_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/left_lower_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/left_lower_leg_collision.obj"/>
       </geometry>
     </collision>
     <collision>
@@ -162,7 +162,7 @@
   <link name="front_right_hip">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_right_hip.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_right_hip.obj"/>
       </geometry>
     </visual>
     <inertial>
@@ -181,12 +181,12 @@
   <link name="front_right_upper_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_right_upper_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_right_upper_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/right_upper_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/right_upper_leg_collision.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -205,12 +205,12 @@
   <link name="front_right_lower_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/front_right_lower_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/front_right_lower_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/right_lower_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/right_lower_leg_collision.obj"/>
       </geometry>
     </collision>
     <collision>
@@ -235,7 +235,7 @@
   <link name="rear_left_hip">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_left_hip.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_left_hip.obj"/>
       </geometry>
     </visual>
     <inertial>
@@ -254,12 +254,12 @@
   <link name="rear_left_upper_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_left_upper_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_left_upper_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/left_upper_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/left_upper_leg_collision.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -278,12 +278,12 @@
   <link name="rear_left_lower_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_left_lower_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_left_lower_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/left_lower_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/left_lower_leg_collision.obj"/>
       </geometry>
     </collision>
     <collision>
@@ -308,7 +308,7 @@
   <link name="rear_right_hip">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_right_hip.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_right_hip.obj"/>
       </geometry>
     </visual>
     <inertial>
@@ -327,12 +327,12 @@
   <link name="rear_right_upper_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_right_upper_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_right_upper_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/right_upper_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/right_upper_leg_collision.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -351,12 +351,12 @@
   <link name="rear_right_lower_leg">
     <visual>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/visual/rear_right_lower_leg.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/visual/rear_right_lower_leg.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/base/collision/right_lower_leg_collision.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/base/collision/right_lower_leg_collision.obj"/>
       </geometry>
     </collision>
     <collision>
@@ -386,22 +386,22 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_sh0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_sh0.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_sh0_base.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_sh0_base.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_sh0_left_motor.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_sh0_left_motor.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_sh0_right_motor.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_sh0_right_motor.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -421,7 +421,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_sh1.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_sh1.obj"/>
       </geometry>
     </visual>
     <inertial>
@@ -443,12 +443,12 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_hr0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_hr0.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_hr0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_hr0.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -468,12 +468,12 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_el0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_el0.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_el0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_el0.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -493,17 +493,17 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_el1.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_el1.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_el1_main.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_el1_main.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_el1_lip.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_el1_lip.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -523,12 +523,12 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_wr0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_wr0.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_wr0.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_wr0.obj"/>
       </geometry>
     </collision>
     <inertial>
@@ -548,17 +548,17 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_wr1.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_wr1.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/arm_link_wr1.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/arm_link_wr1.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/front_jaw.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/front_jaw.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -569,7 +569,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/middle_jaw.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/middle_jaw.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -580,7 +580,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/jaw_tooth.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/jaw_tooth.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -606,17 +606,17 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/visual/arm_link_fngr.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/visual/arm_link_fngr.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/left_hinge.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/left_hinge.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/left_finger.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/left_finger.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -627,7 +627,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/left_tooth.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/left_tooth.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -638,12 +638,12 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/right_hinge.obj"/>
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/right_hinge.obj"/>
       </geometry>
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/right_finger.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/right_finger.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>
@@ -654,7 +654,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="package://qr_assets/spot_description_drake/meshes/arm/collision/right_tooth.obj">
+        <mesh filename="package://drake_trajopt_models/spot_description_drake/meshes/arm/collision/right_tooth.obj">
           <drake:declare_convex/>
         </mesh>
       </geometry>

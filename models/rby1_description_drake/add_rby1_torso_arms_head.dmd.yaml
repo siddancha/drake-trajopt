@@ -3,7 +3,7 @@ directives:
 # Add torso welded to base.
 - add_model:
     name: torso
-    file: package://qr_assets/rby1_description_drake/torso.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/torso.urdf
 - add_weld:
     parent: base::torso_mount
     child: torso::link_torso_base
@@ -11,7 +11,7 @@ directives:
 # Add left arm welded to torso.
 - add_model:
     name: left_arm
-    file: package://qr_assets/rby1_description_drake/left_arm.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/left_arm.urdf
 - add_weld:
     parent: torso::link_torso_5
     child: left_arm::link_left_arm_base
@@ -19,7 +19,7 @@ directives:
 # Add right arm welded to torso.
 - add_model:
     name: right_arm
-    file: package://qr_assets/rby1_description_drake/right_arm.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/right_arm.urdf
 - add_weld:
     parent: torso::link_torso_5
     child: right_arm::link_right_arm_base
@@ -37,7 +37,7 @@ directives:
 # Add head welded to torso.
 - add_model:
     name: head
-    file: package://qr_assets/rby1_description_drake/head_with_mit_camera_mount.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/head_with_mit_camera_mount.urdf
 - add_weld:
     parent: torso::link_torso_5
     child: head::link_head_base

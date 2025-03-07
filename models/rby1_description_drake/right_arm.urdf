@@ -16,7 +16,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_7.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_7.obj" />
       </geometry>
     </visual>
 
@@ -51,7 +51,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_8.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_8.obj" />
       </geometry>
     </visual>
 
@@ -74,7 +74,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_9.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_9.obj" />
       </geometry>
     </visual>
 
@@ -141,7 +141,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_10.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_10.obj" />
       </geometry>
     </visual>
 
@@ -183,7 +183,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_11.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_11.obj" />
       </geometry>
     </visual>
 
@@ -232,7 +232,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_12.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_12.obj" />
       </geometry>
     </visual>
 
@@ -269,7 +269,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/LINK_13.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/LINK_13.obj" />
       </geometry>
     </visual>
 
@@ -292,7 +292,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/FT_SENSOR_R.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/FT_SENSOR_R.obj" />
       </geometry>
     </visual>
 

@@ -3,7 +3,7 @@ directives:
 # Add left gripper welded to left arm.
 - add_model:
     name: left_gripper
-    file: package://qr_assets/rby1_description_drake/gripper_planning.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/gripper_planning.urdf
 - add_weld:
     parent: left_arm::ee_left
     child: left_gripper::ee_body
@@ -20,7 +20,7 @@ directives:
 # Add right gripper welded to right arm.
 - add_model:
     name: right_gripper
-    file: package://qr_assets/rby1_description_drake/gripper_planning.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/gripper_planning.urdf
 - add_weld:
     parent: right_arm::ee_right
     child: right_gripper::ee_body

@@ -14,7 +14,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/EE_BODY.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/EE_BODY.obj" />
       </geometry>
     </visual>
 
@@ -62,7 +62,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/EE_FINGER.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/EE_FINGER.obj" />
       </geometry>
     </visual>
 
@@ -192,7 +192,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
       <geometry>
-        <mesh filename="package://qr_assets/rby1_description_drake/meshes/EE_FINGER.obj" />
+        <mesh filename="package://drake_trajopt_models/rby1_description_drake/meshes/EE_FINGER.obj" />
       </geometry>
     </visual>
 

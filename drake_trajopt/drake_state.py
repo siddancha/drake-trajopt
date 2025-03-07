@@ -25,8 +25,6 @@ from pydrake.all import (
 
 from manipulation.station import LoadScenario, MakeHardwareStation
 
-from qr_spot.sim.brain import RoboverseConfToDrakePositions
-
 import numpy as np
 
 from .trajopt import TrajectoryOptimizer
@@ -52,25 +50,44 @@ class DrakeShape:
     shape_name: str
     links_dict: Dict[str, DrakeLink]
 
+def GetDefaultPackageXmls() -> List[str]:
+    models_path = Path(__file__).parent.parent / "models"
+    return [str(models_path / "package.xml")]
 
 class DrakeState:
     def __init__(
             self,
-            scenario_file: str | Path,
             gripper_link_name: str,
+            scenario_file: str | None = None,
+            scenario_data: str | None = None,
             finger_link_names: List[str] | None = None,
+            package_xmls: List[str] | None = None,
             run_meshcat: bool = True,
         ):
         """
         Args:
+            gripper_link_name (str): Name of the gripper link.
             scenario_file (str | Path): Path to the scenario file to load
                 into the hardware station.
+            scenario_data (str): Data to load into the hardware station.
+            finger_link_names (List[str]): Names of the finger links.
+            package_xmls (List[str]): List of package XML files to load.
             run_meshcat (bool): Whether to run Meshcat.
         """
+        package_xmls = [] if package_xmls is None else package_xmls
+        finger_link_names = [] if finger_link_names is None else finger_link_names
+
+        assert (scenario_file is None) != (scenario_data is None), \
+            "Exactly one of scenario_file or scenario_data must be provided"
+        scenario = LoadScenario(filename=scenario_file, data=scenario_data)
+        
         self.meshcat: Optional[Meshcat] = StartMeshcat() if run_meshcat else None
 
-        scenario = LoadScenario(str(scenario_file))
-        self.station = MakeHardwareStation(scenario, self.meshcat)
+        self.station = MakeHardwareStation(
+            scenario,
+            self.meshcat,
+            package_xmls = GetDefaultPackageXmls(),
+        )
         self.plant = self.station.plant()
         self.scene_graph = self.station.scene_graph()
 

@@ -3,15 +3,15 @@ directives:
 # Add base (floating, actuated wheels).
 - add_model:
     name: base
-    file: package://qr_assets/rby1_description_drake/base_holonomic_with_actuators.urdf
+    file: package://drake_trajopt_models/rby1_description_drake/base_holonomic_with_actuators.urdf
 
 # Add torso and up.
 - add_directives:
-    file: package://qr_assets/rby1_description_drake/add_rby1_torso_arms_head.dmd.yaml
+    file: package://drake_trajopt_models/rby1_description_drake/add_rby1_torso_arms_head.dmd.yaml
 
 # Add grippers.
 - add_directives:
-    file: package://qr_assets/rby1_description_drake/add_rby1_grippers_sim.dmd.yaml
+    file: package://drake_trajopt_models/rby1_description_drake/add_rby1_grippers_sim.dmd.yaml
 
 # Add filter for base, lower torso, and head.
 - add_collision_filter_group:

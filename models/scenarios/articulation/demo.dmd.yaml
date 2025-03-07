@@ -5,7 +5,7 @@ directives:
 # =============================================================================
 
 - add_directives:
-    file: "package://qr_assets/rby1_description_drake/add_rby1_sim_with_holonomic_base_actuators.dmd.yaml"
+    file: "package://drake_trajopt_models/rby1_description_drake/add_rby1_sim_with_holonomic_base_actuators.dmd.yaml"
 
 # =============================================================================
 # Floor
@@ -42,7 +42,7 @@ directives:
 
 - add_model:
     name: toolbox
-    file: "package://qr_assets/toolbox/toolbox.urdf"
+    file: "package://drake_trajopt_models/toolbox/toolbox.urdf"
 
 - add_weld:
     parent: table::top
