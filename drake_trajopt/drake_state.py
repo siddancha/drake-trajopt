@@ -367,8 +367,7 @@ class DrakeState:
     # region Public API
     # =========================================================================
 
-    def UpdateRobotState(self, conf: Conf):
-        positions = RoboverseConfToDrakePositions(conf)
+    def UpdateRobotState(self, positions: np.ndarray):
         self.SetRobotPositions(positions)
         self.Publish()
         return
