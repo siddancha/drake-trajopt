@@ -1,5 +1,5 @@
 [project]
-name = "drake-trajopt"
+name = "drake_trajopt"
 version = "0.1.0"
 description = ""
 authors = [
