@@ -40,18 +40,18 @@ Simple wrapper around Drake's kinematic trajectory optimization
   ```bash
   python examples/spot_and_toolbox.py
   ```
-  This should open a Meshcat window in your browser (at http://localhost:7000/).
+This should open a Meshcat window in your browser (at http://localhost:7000/).
 
-  <img src="media/trajopt.gif" width="50%">
+<img src="media/trajopt.gif" width="50%">
 
-  This example contains a Spot robot and an articulated toolbox object loaded from a URDF file.
-  The initial path asks the robot to move in a straight line colliding with the toolbox.
-  This is shown in the white line.
+This example contains a Spot robot and an articulated toolbox object loaded from a URDF file.
+The initial path asks the robot to move in a straight line colliding with the toolbox.
+This is shown in the white line.
 
-  Trajopt modifies this trajectory to avoid collisions while minimizing the length of the trajectory to the goal.
+Trajopt modifies this trajectory to avoid collisions while minimizing the length of the trajectory to the goal.
 
-  > [!NOTE]
-  > This is a particularly hard example because the initial (white) path is in collision,
-  > taking the SNOPT solver many iterations to converge.
-  > Paths output by an RRT, for example, will be collision-free to begin with.
-  > In those cases, trajectory optimization will be able to smooth the path more efficiently.
+> [!NOTE]
+> This is a particularly hard example because the initial (white) path is in collision,
+> taking the SNOPT solver many iterations to converge.
+> Paths output by an RRT, for example, will be collision-free to begin with.
+> In those cases, trajectory optimization will be able to smooth the path more efficiently.
