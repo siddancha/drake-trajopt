@@ -49,3 +49,9 @@ Simple wrapper around Drake's kinematic trajectory optimization
   This is shown in the white line.
 
   Trajopt modifies this trajectory to avoid collisions while minimizing the length of the trajectory to the goal.
+
+  > [!NOTE]
+  > This is a particularly hard example because the initial (white) path is in collision,
+  > taking the SNOPT solver many iterations to converge.
+  > Paths output by an RRT, for example, will be collision-free to begin with.
+  > In those cases, trajectory optimization will be able to smooth the path more efficiently.
