@@ -47,7 +47,7 @@ directives:
         -4.28676605e-03,  # arm_wr1
         -1.543833,  # arm_f1x
     ])
-    q_toolbox = drake_state.GetRobotPositionsForModel("toolbox")
+    q_toolbox = -0.2 * np.ones((7,))  # open toolbox
     drake_state.SetRobotPositions(np.hstack([q_spot_nominal, q_toolbox]))
     drake_state.Publish()
 
