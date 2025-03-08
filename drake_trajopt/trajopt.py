@@ -140,7 +140,7 @@ class TrajectoryOptimizer:
         Logger().INFO("\n" + timer.get_stats_string())
 
         t_result = np.linspace(traj.start_time(), traj.end_time(), num=100)
-        path_result = [traj.value(t)[dv_indices, 0] for t in t_result]
+        path_result = [traj.value(t)[:, 0] for t in t_result]
 
         self.RehearseTrajectory(path_result, t_result)
 
