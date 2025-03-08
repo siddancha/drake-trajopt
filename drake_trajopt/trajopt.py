@@ -42,6 +42,15 @@ class TrajectoryOptimizer:
     def __init__(self, drake_state: DrakeState):
         self.drake_state = drake_state
 
+        # Add meshcat slider to set line width of the end-effector trajectory.
+        self.meshcat.AddSlider(
+            name = "Line width",
+            min = 0.0,
+            max = 10.0,
+            step = 0.1,
+            value = 3.0,
+        )
+
     @property
     def plant(self):
         return self.drake_state.plant
@@ -49,6 +58,10 @@ class TrajectoryOptimizer:
     @property
     def scene_graph(self):
         return self.drake_state.scene_graph
+
+    @property
+    def meshcat(self):
+        return self.drake_state.meshcat
 
     @property
     def plant_context(self):
@@ -363,10 +376,11 @@ class TrajectoryOptimizer:
             ee_traj.append(point_3d)
         ee_traj = np.stack(ee_traj, axis=1)  # (3, N)
 
-        self.drake_state.meshcat.SetLine(
+        line_width = self.meshcat.GetSliderValue("Line width")
+        self.meshcat.SetLine(
             meshcat_path,
             ee_traj,
-            line_width=4,
+            line_width=line_width,
             rgba=traj_viz_color,
         )
 
