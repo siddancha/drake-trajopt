@@ -327,11 +327,11 @@ class TrajectoryOptimizer:
     def SampleVizValuesFromBsplineTraj(traj: BsplineTrajectory) -> np.ndarray:
         """
         Returns:
-            (np.ndarray, dtype=float, shape=(10, N)): evenly spaced samples
+            (np.ndarray, dtype=float, shape=(P, N)): evenly spaced samples
                 from the trajectory.
         """
         num_samples = cfg.trajopt.kot.num_viz_traj_samples
-        return traj.vector_values(np.linspace(0, 1, num_samples),)  # (10, N)
+        return traj.vector_values(np.linspace(0, 1, num_samples),)  # (P, N)
 
 
     def PlotEndEffectorTrajInMeshcat(
@@ -342,7 +342,7 @@ class TrajectoryOptimizer:
         ) -> np.ndarray:
         """
         Args:
-            traj BsplineTrajectory | (np.ndarray, dtype=float, shape=(10, C)):
+            traj BsplineTrajectory | (np.ndarray, dtype=float, shape=(P, C)):
                 Bspline trajectory, or evenly sampled values from the trajectory.
         """
         traj_values = (
@@ -354,7 +354,7 @@ class TrajectoryOptimizer:
         # each configuration in the trajectory.
         ee_traj = []
         for i in range(traj_values.shape[1]):
-            positions = traj_values[:, i]  # (10,)
+            positions = traj_values[:, i]  # (P,)
             self.plant.SetPositions(self.plant_context, positions)
             X_WG = self.drake_state.X_WG()
             point_3d = X_WG.translation()  # (3,)
@@ -379,19 +379,19 @@ class TrajectoryOptimizer:
         ) -> np.ndarray:
         """
         Args:
-            control_points (np.ndarray, dtype=float, shape=(10 * C)): control points.
+            control_points (np.ndarray, dtype=float, shape=(P * C)): control points.
         """
-        control_points = control_points.reshape((10, -1))  # (10, C)
+        control_points = control_points.reshape((self.drake_state.P, -1))  # (P, C)
         basis = BsplineBasis(order=4, num_basis_functions=control_points.shape[1])
         traj = BsplineTrajectory(basis, control_points)
-        traj_values = self.SampleVizValuesFromBsplineTraj(traj)  # (10, N)
+        traj_values = self.SampleVizValuesFromBsplineTraj(traj)  # (P, N)
 
         # Sleep if the trajectory has changed significantly, so that the user
         # is able to notice the previous trajectory.
         # optimization.
         TOLERANCE = 1e-3  # 1mm
         if prev_traj_values is not None:
-            diff = traj_values - prev_traj_values  # (10, N)
+            diff = traj_values - prev_traj_values  # (P, N)
             distance: np.ndarray = np.linalg.norm(diff, axis=0)  # (N,)
             if distance.max() > TOLERANCE:
                 time.sleep(cfg.trajopt.kot.viz_sleep_time)
@@ -428,8 +428,8 @@ class TrajectoryOptimizer:
         bound = cfg.trajopt.kot.collision_margin
         influence_distance_offset = 0.1
 
-        q_start = traj.InitialValue()  # (10,)
-        q_goal  = traj.FinalValue()    # (10,)
+        q_start = traj.InitialValue()  # (P,)
+        q_goal  = traj.FinalValue()    # (P,)
 
         # Compute clearance for the start position
         with timer.time_as("Start clearance"):
@@ -463,16 +463,16 @@ class TrajectoryOptimizer:
         """
         Args:
             num_control_pts (int): number of control points.
-            q_start (np.ndarray, dtype=float, shape=(10,)): start configuration.
-            q_goal (np.ndarray, dtype=float, shape=(10,)): goal configuration.
+            q_start (np.ndarray, dtype=float, shape=(P,)): start configuration.
+            q_goal (np.ndarray, dtype=float, shape=(P,)): goal configuration.
             timer: Timer object to measure time.
             dv_indices (List[int]): indices of decision variables to optimize.
         """
         num_q = self.plant.num_positions()
         num_control_pts = init_guess.num_control_points()
 
-        q_start = init_guess.InitialValue()  # (10,)
-        q_goal  = init_guess.FinalValue()    # (10,)
+        q_start = init_guess.InitialValue()  # (P,)
+        q_goal  = init_guess.FinalValue()    # (P,)
 
         trajopt = KinematicTrajectoryOptimization(init_guess)
         prog = trajopt.get_mutable_prog()
@@ -529,7 +529,7 @@ class TrajectoryOptimizer:
         def VizCallback(control_points: np.ndarray[Variable]):
             """
             Args:
-                control_points (np.ndarray, dtype=float, shape=(10, C)): control points.
+                control_points (np.ndarray, dtype=float, shape=(P, C)): control points.
             """
             nonlocal viz_traj_values
             viz_traj_values = self.PlotEndEffectorTrajInMeshcatCallback(

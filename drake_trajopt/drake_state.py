@@ -1,6 +1,6 @@
 from copy import copy
 import dataclasses as dc
-import os
+from functools import cached_property
 from pathlib import Path
 import shutil
 from typing import Dict, List, Optional, Tuple
@@ -130,6 +130,10 @@ class DrakeState:
         )
 
         self.Publish()
+
+    @cached_property
+    def P(self) -> int:
+        return self.plant.num_positions()
 
     def GetFrameId (self, frame_name) -> FrameId:
         query_object: QueryObject = self.scene_graph.get_query_output_port().Eval(self.sg_context)
