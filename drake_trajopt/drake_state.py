@@ -1,9 +1,10 @@
+from typing import Dict, List, Optional
 from copy import copy
 import dataclasses as dc
 from functools import cached_property
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Optional
+from webbrowser import open as _webbrowser_open
 
 from pydrake.all import (
     CollisionFilterDeclaration,
@@ -60,6 +61,7 @@ class DrakeState:
             finger_link_names: List[str] | None = None,
             package_xmls: List[str] | None = None,
             run_meshcat: bool = True,
+            open_meshcat: bool = True,
         ):
         """
         Args:
@@ -70,6 +72,8 @@ class DrakeState:
             finger_link_names (List[str]): Names of the finger links.
             package_xmls (List[str]): List of package XML files to load.
             run_meshcat (bool): Whether to run Meshcat.
+            open_meshcat (bool): Whether to open Meshcat automatically in a new
+                browser tab.
         """
         package_xmls = [] if package_xmls is None else package_xmls
         finger_link_names = [] if finger_link_names is None else finger_link_names
@@ -78,7 +82,12 @@ class DrakeState:
             "Exactly one of scenario_file or scenario_data must be provided"
         scenario = LoadScenario(filename=scenario_file, data=scenario_data)
         
-        self.meshcat: Optional[Meshcat] = StartMeshcat() if run_meshcat else None
+        if run_meshcat:
+            self.meshcat: Meshcat = StartMeshcat()
+            if open_meshcat:
+                _webbrowser_open(url=self.meshcat.web_url(), new=False)
+        else:
+            self.meshcat = None
 
         self.station = MakeHardwareStation(
             scenario,
