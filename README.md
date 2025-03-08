@@ -42,7 +42,7 @@ Simple wrapper around Drake's kinematic trajectory optimization
   ```
   This should open a Meshcat window in your browser (at http://localhost:7000/).
 
-  ![Spot and toolbox](./examples/spot_and_toolbox.mp4)
+  <img src="media/trajopt.gif" width="50%">
 
   This example contains a Spot robot and an articulated toolbox object loaded from a URDF file.
   The initial path asks the robot to move in a straight line colliding with the toolbox.
