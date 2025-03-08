@@ -108,6 +108,10 @@ class TrajectoryOptimizer:
         Args:
             path_guess (List[np.ndarray, dtype=float, shape=(P,)]): path guess
             dv_indices (List[int]): indices of decision variables to optimize
+
+        Returns:
+            (List[np.ndarray, dtype=float, shape=(P,)]): smoothed path
+            (List[float]): times corresponding to each configuration
         """
         # Save actual positions to reset them later.
         saved_positions = self.plant.GetPositions(self.plant_context)
