@@ -150,6 +150,13 @@ class DrakeState:
         # automatically gets updated when the plant positions are set!
         return RigidTransform(X_WG)
 
+    def GetRobotPositions(self) -> np.ndarray:
+        return self.plant.GetPositions(self.plant_context)
+
+    def GetRobotPositionsForModel(self, model_name: str) -> np.ndarray:
+        model_instance = self.plant.GetModelInstanceByName(model_name)
+        return self.plant.GetPositions(self.plant_context, model_instance)
+
     def SetRobotPositions(self, positions: np.ndarray):
         self.plant.SetPositions(self.plant_context, positions)
 

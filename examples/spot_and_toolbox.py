@@ -12,19 +12,18 @@ directives:
   - add_model:
       name: spot
       file: package://drake_trajopt_models/spot/spot_with_arm_and_floating_base_actuators.urdf
-      default_joint_positions:
-          arm_sh0: [2.26974487e-04]
-          arm_sh1: [-2.30147457e+00]
-          arm_el0: [1.62356675e+00]
-          arm_el1: [7.04407692e-03]
-          arm_wr0: [1.55041754e+00]
-          arm_wr1: [-4.28676605e-03]
-          arm_f1x: [-1.543833]
 
   # Add toolbox
   - add_model:
       name: toolbox
       file: package://drake_trajopt_models/toolbox/toolbox.urdf
+
+  # Weld toolbox to the world
+  - add_weld:
+      parent: world
+      child: toolbox::body
+      X_PC:
+        translation: [2.0, 0.0, 0.4]  # position the toolbox in front of Spot
     """
 
     # Create DrakeState with the scenario data
@@ -35,20 +34,20 @@ directives:
         run_meshcat=True
     )
 
-    # Position Spot in front of the table
-    # Get the current positions
-    plant = drake_state.plant
-    plant_context = drake_state.plant_context
-    current_positions = plant.GetPositions(plant_context)
-    
-    # Set the base position (assuming the first 3 values are x, y, z)
-    # and the 4th value is the rotation around z
-    current_positions[0] = 0.5  # x position
-    current_positions[1] = 0.0  # y position
-    current_positions[3] = 0.0  # rotation around z (facing the table)
-    
-    # Update the robot state with the new positions
-    drake_state.SetRobotPositions(current_positions)
+    q_spot_nominal = np.array([
+        0.0,  # x
+        0.0,  # y
+        0.0,  # yaw position
+        2.26974487e-04,  # arm_sh0
+        -2.30147457e+00,  # arm_sh1 
+        1.62356675e+00,  # arm_el0
+        7.04407692e-03,  # arm_el1
+        1.55041754e+00,  # arm_wr0
+        -4.28676605e-03,  # arm_wr1
+        -1.543833,  # arm_f1x
+    ])
+    q_toolbox = drake_state.GetRobotPositionsForModel("toolbox")
+    drake_state.SetRobotPositions(np.hstack([q_spot_nominal, q_toolbox]))
     drake_state.Publish()
     
     print("Scenario loaded. Press Ctrl+C to exit.")
