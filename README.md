@@ -40,3 +40,12 @@ Simple wrapper around Drake's kinematic trajectory optimization
   ```bash
   python examples/spot_and_toolbox.py
   ```
+  This should open a Meshcat window in your browser (at http://localhost:7000/).
+
+  ![Spot and toolbox](./examples/spot_and_toolbox.mp4)
+
+  This example contains a Spot robot and an articulated toolbox object loaded from a URDF file.
+  The initial path asks the robot to move in a straight line colliding with the toolbox.
+  This is shown in the white line.
+
+  Trajopt modifies this trajectory to avoid collisions while minimizing the length of the trajectory to the goal.
