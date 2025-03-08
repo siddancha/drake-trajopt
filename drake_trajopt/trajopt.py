@@ -101,12 +101,12 @@ class TrajectoryOptimizer:
 
     def Smooth(
             self,
-            path_guess: np.ndarray,
+            path_guess: List[np.ndarray],
             dv_indices: List[int],
         ) -> Tuple[List[np.ndarray], List[float]]:
         """
         Args:
-            path_guess (np.ndarray, dtype=float, shape=(P, C)): path guess
+            path_guess (List[np.ndarray, dtype=float, shape=(P,)]): path guess
             dv_indices (List[int]): indices of decision variables to optimize
         """
         # Save actual positions to reset them later.
@@ -356,7 +356,7 @@ class TrajectoryOptimizer:
         for i in range(traj_values.shape[1]):
             positions = traj_values[:, i]  # (10,)
             self.plant.SetPositions(self.plant_context, positions)
-            X_WG = self.drake_state.X_WF()
+            X_WG = self.drake_state.X_WG()
             point_3d = X_WG.translation()  # (3,)
             ee_traj.append(point_3d)
         ee_traj = np.stack(ee_traj, axis=1)  # (3, N)
@@ -405,17 +405,18 @@ class TrajectoryOptimizer:
         -> BsplineTrajectory:
         """
         Args:
-            q_guess (np.ndarray, dtype=float, shape=(P, C)): path guess
+            q_guess (List[np.ndarray, dtype=float, shape=(C,)]): path guess
             dv_indices (List[int]): indices of decision variables to optimize
         """
         # Subsample control points if there are too many
-        if path_guess.shape[1] > cfg.trajopt.kot.max_control_points:
-            step = path_guess.shape[1] // cfg.trajopt.kot.max_control_points
-            path_guess = path_guess[:, ::step]
-        num_control_pts = path_guess.shape[1]
+        if len(path_guess) > cfg.trajopt.kot.max_control_points:
+            step = len(path_guess) // cfg.trajopt.kot.max_control_points
+            path_guess = path_guess[::step]
+        num_control_pts = len(path_guess)
         Logger.INFO(f"[KTO] Number of control points: {num_control_pts}")
 
         basis = BsplineBasis(order=4, num_basis_functions=num_control_pts)
+        path_guess = np.stack(path_guess, axis=1)  # (P, C)
         return BsplineTrajectory(basis, path_guess)
 
 

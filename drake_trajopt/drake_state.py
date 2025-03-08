@@ -102,8 +102,6 @@ class DrakeState:
         self.illustration_visualizer_context = self.illustration_visualizer.GetMyContextFromRoot(self.root_context)
         self.proximity_visualizer_context = self.proximity_visualizer.GetMyContextFromRoot(self.root_context)
 
-        self.trajopt = TrajectoryOptimizer(self)
-
         # self._world_shapes: Dict[str, DrakeShape] = collections.OrderedDict()
         # self._grasped_shape: Optional[DrakeShape] = None
 

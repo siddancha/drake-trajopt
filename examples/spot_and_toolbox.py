@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+from typing import List
 import numpy as np
-from pydrake.all import RigidTransform, StartMeshcat
-from drake_trajopt.drake_state import DrakeState
+
+from drake_trajopt.all import DrakeState, TrajectoryOptimizer
 
 def main():
     # Define the scenario as a YAML string
@@ -49,7 +50,19 @@ directives:
     q_toolbox = drake_state.GetRobotPositionsForModel("toolbox")
     drake_state.SetRobotPositions(np.hstack([q_spot_nominal, q_toolbox]))
     drake_state.Publish()
-    
+
+    # Define a straight line path for Spot to move towards the toolbox
+    # The path will be a straight line in the x-y plane
+    path: List[np.ndarray] = []
+    for x in np.linspace(0., 4., 100):
+        q_spot = q_spot_nominal.copy()
+        q_spot[0] = x
+        path.append(np.hstack([q_spot, q_toolbox]))
+
+    trajopt = TrajectoryOptimizer(drake_state)
+    dv_indices = np.arange(10)  # only the first 10 positions are the decision variables
+    trajopt.Smooth(path, dv_indices)
+
     print("Scenario loaded. Press Ctrl+C to exit.")
     
     try:
