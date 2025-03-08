@@ -1,9 +1,9 @@
 from copy import copy
 import dataclasses as dc
 from functools import cached_property
+import numpy as np
 from pathlib import Path
-import shutil
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 from pydrake.all import (
     CollisionFilterDeclaration,
@@ -25,9 +25,6 @@ from pydrake.all import (
 
 from manipulation.station import LoadScenario, MakeHardwareStation
 
-import numpy as np
-
-from .trajopt import TrajectoryOptimizer
 
 @dc.dataclass
 class GeomData:

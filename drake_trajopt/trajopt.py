@@ -10,7 +10,7 @@ Code references:
 
 import numpy as np
 import time
-from typing import List, Literal, Optional, Tuple, TYPE_CHECKING
+from typing import List, Optional, Tuple
 
 from .timer import Timer
 from .utils import Logger
@@ -35,13 +35,11 @@ from pydrake.all import (
     Variable,
 )
 from manipulation.meshcat_utils import PublishPositionTrajectory
-
-if TYPE_CHECKING:
-    from .drake_state import DrakeState
+from .drake_state import DrakeState
 
 
 class TrajectoryOptimizer:
-    def __init__(self, drake_state: 'DrakeState'):
+    def __init__(self, drake_state: DrakeState):
         self.drake_state = drake_state
 
     @property

@@ -63,12 +63,6 @@ directives:
     dv_indices = np.arange(10)  # only the first 10 positions are the decision variables
     trajopt.Smooth(path, dv_indices)
 
-    print("Scenario loaded. Press Ctrl+C to exit.")
-    
-    try:
-        input("Press Enter to exit...")
-    except KeyboardInterrupt:
-        pass
 
 if __name__ == "__main__":
     main()
